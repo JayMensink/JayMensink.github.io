@@ -10,7 +10,6 @@
 		<style>
 			body {
 				background-color: #0F0F0F;
-				transition-duration: 666ms;
 			}
 			a {
 				width: min(25vw, 25vh);
@@ -22,8 +21,6 @@
 				position: fixed;
 				top: 50%;
 				left: 50%;
-				transition-duration: 666ms;
-				transition-delay: 1s;
 			}
 		</style>
 	</head>
@@ -31,9 +28,9 @@
 	<script>
 		setInterval(function() {
 			let theme = {background: "#0F0F0F", o: "#FFFFFF"};
-			if ( (new Date().getHours() >= 9) && (new Date().getHours() < 21) ) { theme = {background: "#FFFFFF", o: "#0F0F0F"}; }
+			if ( (new Date().getHours() >= 0) && (new Date().getHours() < 21) ) { theme = {background: "#FFFFFF", o: "#0F0F0F"}; }
 			document.body.style.backgroundColor = theme.background;
 			document.querySelector("a").style.border = "solid min(12.5vw, 12.5vh) " + theme.o;
-		}, 60000)
+		}, 2000)
 	</script>
 </html>
