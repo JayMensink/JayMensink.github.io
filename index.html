@@ -1,0 +1,47 @@
+<html>
+
+	<head>
+		<title>Jay Mensink</title>	
+		<meta content="Jay Mensink" property="og:title"/>
+		<meta content="You already know me." property="og:description"/>
+		<meta content="https://github.com/JayMensink" property="og:url"/>
+		<meta content="https://cdn.discordapp.com/attachments/702414070518775901/1107756013198774293/watching.png" property="og:image"/>
+		<meta content="#FFFFFF" data-react-helmet="true" name="theme-color"/>
+		<link rel="icon" type="image/png" href="images/watching.png">
+		<style>
+			body {
+				background-color:#0F0F0F;
+				transition-duration: 666ms;
+			}
+			a {
+				width: min(25vw, 25vh);
+				height: min(25vw, 25vh);
+				border-radius: max(100vw, 100vh);
+				border: solid min(12.5vw, 12.5vh) #FFFFFF;
+				margin-top: max(-25vw, -25vh);
+				margin-left: max(-25vw, -25vh);
+				position: fixed;
+				top: 50%;
+				left: 50%;
+				transition-duration: 666ms;
+				transition-delay: 1s;
+			}
+		</style>
+	</head>
+	
+	<body><a href="mailto:j.mensink0206@gmail.com"></a></body>
+
+	<script>
+
+		function handleTheme() {
+			let theme = {background: "#0F0F0F", o: "#FFFFFF"};
+			if ( (new Date().getHours() >= 9) && (new Date().getHours() < 21) ) { theme = {background: "#FFFFFF", o: "#0F0F0F"}; }
+			document.body.style.backgroundColor = theme.background;
+			document.querySelector("a").style.border = "solid min(12.5vw, 12.5vh) " + theme.o;
+		}
+
+		setInterval(function() { handleTheme(); }, 60000)
+
+	</script>
+
+</html>
