@@ -485,22 +485,3 @@ class DropdownOption {
 	}
 
 }
-
-
-
-
-
-// Test values
-let panel = new FilterPanel("Example Panel");
-
-let checkbox = panel.addCheckbox("Example Checkbox");
-
-let textbox = panel.addTextbox("Example Textbox (Plain)");
-let textbox2 = panel.addTextbox("Example Textbox (Money)", "€", "0.00");
-
-let dropdown = panel.addDropdown("Test Dropdown");
-dropdown.addOption(new DropdownOption("Avicia Paper", "https://raw.githubusercontent.com/JayMensink/WynnCrafter/main/sandbox/ingredient_images/Acacia%20Paper.png"));
-dropdown.addOption(new DropdownOption("Avicia Wood", "https://raw.githubusercontent.com/JayMensink/WynnCrafter/main/sandbox/ingredient_images/Acacia%20Wood.png"));
-dropdown.addOption(new DropdownOption("Molten Ingot", "https://raw.githubusercontent.com/JayMensink/WynnCrafter/main/sandbox/ingredient_images/Molten%20Ingot.png"));
-
-let button = panel.addButton("Example Button");
