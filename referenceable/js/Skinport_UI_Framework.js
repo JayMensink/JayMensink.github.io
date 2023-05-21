@@ -20,6 +20,44 @@
 
 
 
+class Colors {
+
+	constructor() { throw new Error('Cannot instantiate this class.'); }
+
+	static contraband = "#ffae39";
+	static knife = "#8650ac";
+	static covert = "#eb4b4b";
+	static classified = "#d32ee6";
+	static restricted = "#8847ff";
+	static milSpec = "#4b69ff";
+	static industrial = "#5e98d9";
+	static consumer = "#b0c3d9";
+	static default = "#d2d2d2";
+
+	static factoryNew = "#5eb648";
+	static minimalWear = "#79d154";
+	static fieldTested = "#e3e15b";
+	static wellWorn = "#e9a75d";
+	static battleScarred = "#e05a59";
+
+	static tradable = "#00a67c";
+	static untradable = "#c7d296";
+
+	static none = "#2b2f30";
+
+	static getColorFromFloat(float=0) {
+		if ( float >= 0.45 ) { return this.battleScarred; }
+		if ( float >= 0.38 ) { return this.wellWorn; }
+		if ( float >= 0.15 ) { return this.fieldTested; }
+		if ( float >= 0.07 ) { return this.minimalWear; }
+		if ( float >= 0.00 ) { return this.factoryNew; }
+		return this.none;
+	}
+
+}
+
+
+
 class FilterPanel {
 
 	constructor(name, opened=false, hidden=false, onOpen=function(){}, onClose=function(){}, onFlip=function(){}, onAddElement=function(){}, onRename=function(){}, onShow=function(){}, onHide=function(){}, onToggleVisibility=function(){}) {
