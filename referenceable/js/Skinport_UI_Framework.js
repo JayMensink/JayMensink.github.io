@@ -195,6 +195,7 @@ class Checkbox {
 		this.element = document.createElement("div");
 		this.element.classList.add("CatalogCheckbox");
 		this.element.setAttribute("role", "presentation");
+		this.element.style.marginBottom = "8px";
 		this.element.innerHTML = "<div class=\"Checkbox Checkbox--center\"><input class=\"Checkbox-input\" type=\"checkbox\"><div class=\"Checkbox-overlay\"></div><div class=\"Checkbox-label\"></div></div>";
 		
 		this.element.querySelector(".Checkbox-label").innerText = name;
@@ -363,8 +364,8 @@ class Button {
 		this.element.type = "button";
 		this.element.className = "ExteriorFilter-showExactBtn";
 		this.element.innerText = name;
-		
-		this.element.style.marginTop = "8px";
+
+		this.element.style.marginBottom = "8px";
 		this.element.addEventListener("click", onClick);
 
 		if (hidden) { this.hide(); }
