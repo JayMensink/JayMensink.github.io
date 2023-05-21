@@ -360,13 +360,11 @@ class Button {
 		this.onToggleVisibility = onToggleVisibility;
 
 		this.element = document.createElement("button");
-		this.element.classList.add("SubmitButton");
-		this.element.classList.add("CartSummary-checkoutBtn");
-		this.element.classList.add("SubmitButton-isFull");
+		this.element.type = "button";
+		this.element.className = "ExteriorFilter-showExactBtn";
+		this.element.innerText = name;
+		
 		this.element.style.marginTop = "8px";
-		this.element.style.width = "80%";
-		this.element.style.marginLeft = "30px";
-		this.element.innerHTML = "<div class=\"SubmitButton-title\">" + name + "</div>";
 		this.element.addEventListener("click", onClick);
 
 		if (hidden) { this.hide(); }
