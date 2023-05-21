@@ -1,15 +1,3 @@
-// ==UserScript==
-// @name         Skinport UI Framework
-// @namespace    http://tampermonkey.net/
-// @version      1.0
-// @description  A Skinport Utility Plugin
-// @author       Jay
-// @match        https://skinport.com/*
-// @icon         https://jaymensink.github.io/images/watching.png
-// ==/UserScript==
-
-
-
 // TODO
 // Implement delete methods of elements removing them from FilterPanel.elements
 // Finish writing DropDown class
