@@ -1,3 +1,15 @@
+// ==UserScript==
+// @name         Skinport UI Framework
+// @namespace    http://tampermonkey.net/
+// @version      1.0
+// @description  A Skinport Utility Plugin
+// @author       Jay
+// @match        https://skinport.com/*
+// @icon         https://jaymensink.github.io/images/watching.png
+// ==/UserScript==
+
+
+
 // TODO
 // Implement delete methods of elements removing them from FilterPanel.elements
 // Finish writing DropDown class
@@ -18,7 +30,7 @@ class FilterPanel {
 
 		this.element = document.createElement("div");
 		this.element.classList.add("FilterWrapper");
-		this.element.innerHTML = "<div role=\"presentation\" class=\"FilterWrapper-header\"><div class=\"FilterWrapper-title\">" + name + "</div><div class=\"FilterWrapper-arrow\"><svg class=\"bottom-chevron\"><use xlink:href=\"/static/svg/sprite.3563a20180e5557bf5d7.svg#bottom-chevron\"></use></svg></div></div><div class=\"FilterWrapper-contentWrapper hidden\" style=\"display: none\"><div class=\"FilterWrapper-content\"><div class=\"" + name.trim().replace(" ", "") + "\"></div></div></div>";
+		this.element.innerHTML = "<div role=\"presentation\" class=\"FilterWrapper-header\"><div class=\"FilterWrapper-title\">" + name + "</div><div class=\"FilterWrapper-arrow\"><svg class=\"bottom-chevron\"><use xlink:href=\"https://skinport.com/static/svg/sprite.3563a20180e5557bf5d7.svg#bottom-chevron\"></use></svg></div></div><div class=\"FilterWrapper-contentWrapper hidden\" style=\"display: none\"><div class=\"FilterWrapper-content\"><div class=\"" + name.trim().replace(" ", "") + "\"></div></div></div>";
 		this.element.querySelector(".FilterWrapper-header").addEventListener("click", this.flip )
 		
 		if (opened) { this.open(); }
