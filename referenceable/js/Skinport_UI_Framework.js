@@ -39,6 +39,7 @@ class Colors {
 	static fieldTested = "#e3e15b";
 	static wellWorn = "#e9a75d";
 	static battleScarred = "#e05a59";
+	static noWear = "#8e9191";
 
 	static tradable = "#00a67c";
 	static untradable = "#c7d296";
@@ -51,7 +52,7 @@ class Colors {
 		if ( float >= 0.15 ) { return this.fieldTested; }
 		if ( float >= 0.07 ) { return this.minimalWear; }
 		if ( float >= 0.00 ) { return this.factoryNew; }
-		return this.none;
+		return this.noWear;
 	}
 
 }
