@@ -45,7 +45,7 @@ class Colors {
 	static untradable = "#c7d296";
 
 	static site = "#2b2f30";
-	static siteDark = "232728";
+	static siteDark = "#232728";
 
 	static getColorFromFloat(float=0) {
 		if ( float >= 0.45 ) { return this.battleScarred; }
