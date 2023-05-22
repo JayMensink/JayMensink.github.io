@@ -465,9 +465,8 @@ class Dropdown {
 	}
 
 	select = (option) => {
-		option = option.closest("li");
-		this.element.querySelector(".adyen-checkout__dropdown__button").innerHTML = "<img class=\"adyen-checkout__dropdown__button__icon adyen-checkout__image adyen-checkout__image--loaded\" src=\"" + option.querySelector("img").src + "\" alt=\"ING\"><span class=\"adyen-checkout__dropdown__button__text\">" + option.querySelector("span").innerText + "</span>"
-		this.selected = option.querySelector("span").innerText;
+		this.element.querySelector(".adyen-checkout__dropdown__button").innerHTML = "<img class=\"adyen-checkout__dropdown__button__icon adyen-checkout__image adyen-checkout__image--loaded\" src=\"" + option.image + "\" alt=\"ING\"><span class=\"adyen-checkout__dropdown__button__text\">" + option.name + "</span>"
+		this.selected = option.name;
 		this.close();
 		this.onSelect();
 	}
@@ -495,17 +494,14 @@ class Dropdown {
 
 	addOption = (option) => {
 		this.options.push(option);
-		let optionElement = document.createElement("li");
-		optionElement.setAttribute("aria-disabled", false);
-		optionElement.setAttribute("aria-selected", false);
-		optionElement.classList.add("adyen-checkout__dropdown__element");
-		optionElement.classList.add("Select-module_adyen-checkout__dropdown__element__ORU4-");
-		optionElement.setAttribute("data-value", "0721");
-		optionElement.setAttribute("role", "option");
-		optionElement.setAttribute("tabindex", "-1");
-		optionElement.innerHTML = "<img class=\"adyen-checkout__dropdown__element__icon adyen-checkout__image adyen-checkout__image--loaded\" alt=\"" + option.name + "\" src=\"" + option.image + "\"><span class=\"adyen-checkout__dropdown__element__text\">" + option.name + "</span>";
-		this.element.querySelector("ul").appendChild(optionElement);
-		optionElement.addEventListener("click", () => { this.select(optionElement); });
+		this.element.querySelector("ul").appendChild(option.element);
+	}
+
+	findOptionByName = (name) => {
+		for (const option of this.options) {
+			if (option.name == name) { return option; }
+		}
+		return null;
 	}
 
 }
@@ -514,11 +510,28 @@ class Dropdown {
 
 class DropdownOption {
 
-	constructor(name, image) {
+	constructor(name, image, dropdown) {
 		
 		this.name = name;
 		this.image = image;
+		this.dropdown = dropdown;
 
+		this.element = document.createElement("li");
+		this.element.setAttribute("aria-disabled", false);
+		this.element.setAttribute("aria-selected", false);
+		this.element.classList.add("adyen-checkout__dropdown__element");
+		this.element.classList.add("Select-module_adyen-checkout__dropdown__element__ORU4-");
+		this.element.setAttribute("data-value", "0721");
+		this.element.setAttribute("role", "option");
+		this.element.setAttribute("tabindex", "-1");
+		this.element.innerHTML = "<img class=\"adyen-checkout__dropdown__element__icon adyen-checkout__image adyen-checkout__image--loaded\" alt=\"" + name + "\" src=\"" + image + "\"><span class=\"adyen-checkout__dropdown__element__text\">" + name + "</span>";
+
+		this.element.addEventListener("click", this.select);
+
+	}
+
+	select = () => {
+		this.dropdown.select( this );
 	}
 
 }
