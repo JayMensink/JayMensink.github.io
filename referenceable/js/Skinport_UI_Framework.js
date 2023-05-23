@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////////////////
 //                                                                                     //
-//      ██████╗██╗  ██╗██╗███╗  ██╗██████╗  █████╗ ██████╗ ████████╗  ██╗   ██╗██╗     //
-//     ██╔════╝██║ ██╔╝██║████╗ ██║██╔══██╗██╔══██╗██╔══██╗╚══██╔══╝  ██║   ██║██║     //
-//     ╚█████╗ █████═╝ ██║██╔██╗██║██████╔╝██║  ██║██████╔╝   ██║     ██║   ██║██║     //
-//      ╚═══██╗██╔═██╗ ██║██║╚████║██╔═══╝ ██║  ██║██╔══██╗   ██║     ██║   ██║██║     //
-//     ██████╔╝██║ ╚██╗██║██║ ╚███║██║     ╚█████╔╝██║  ██║   ██║     ╚██████╔╝██║     //
-//     ╚═════╝ ╚═╝  ╚═╝╚═╝╚═╝  ╚══╝╚═╝      ╚════╝ ╚═╝  ╚═╝   ╚═╝      ╚═════╝ ╚═╝     //
+//      ██████╗██╗  ██╗██╗███╗  ██╗██████╗  █████╗ ██████╗ ████████╗  ██╗   ██╗██╗     //
+//     ██╔════╝██║ ██╔╝██║████╗ ██║██╔══██╗██╔══██╗██╔══██╗╚══██╔══╝  ██║   ██║██║     //
+//     ╚█████╗ █████═╝ ██║██╔██╗██║██████╔╝██║  ██║██████╔╝   ██║     ██║   ██║██║     //
+//      ╚═══██╗██╔═██╗ ██║██║╚████║██╔═══╝ ██║  ██║██╔══██╗   ██║     ██║   ██║██║     //
+//     ██████╔╝██║ ╚██╗██║██║ ╚███║██║     ╚█████╔╝██║  ██║   ██║     ╚██████╔╝██║     //
+//     ╚═════╝ ╚═╝  ╚═╝╚═╝╚═╝  ╚══╝╚═╝      ╚════╝ ╚═╝  ╚═╝   ╚═╝      ╚═════╝ ╚═╝     //
 //                                                                                     //
 //  ███████╗██████╗  █████╗ ███╗   ███╗███████╗ ██╗       ██╗ █████╗ ██████╗ ██╗  ██╗  //
 //  ██╔════╝██╔══██╗██╔══██╗████╗ ████║██╔════╝ ██║  ██╗  ██║██╔══██╗██╔══██╗██║ ██╔╝  //
@@ -60,6 +60,232 @@ class Colors {
 
 
 
+
+
+class Listing {
+
+	constructor(hoursUntilTradable, stickers, image, price, sale, suggestedPrice, souvenir, stattrak, weapon, weaponColor, skin, hasNametag, phase, fadePercentage, subText, wear, rarity, float, link, id, urlName) {
+
+		this.hoursUntilTradable = hoursUntilTradable;
+		this.stickers = stickers;
+		this.image = image;
+		this.price = price;
+		this.sale = sale;
+		this.suggestedPrice = suggestedPrice;
+		this.souvenir = souvenir;
+		this.stattrak = stattrak;
+		this.weapon = weapon;
+		this.weaponColor = weaponColor;
+		this.skin = skin;
+		this.hasNametag = hasNametag;
+		this.phase = phase;
+		this.fadePercentage = fadePercentage;
+		this.subText = subText;
+		this.wear = wear;
+		this.rarity = rarity;
+		this.float = float;
+		this.link = link;
+		this.id = id;
+		this.urlName = urlName;
+		this.element = null;
+
+	}
+
+	static fromElement = (listing) => {
+
+		if (listing == null) { throw new Error("Must provide listing element."); }
+
+		let hoursUntilTradable = 0;
+		if ( listing.querySelector(".TradeLock-lock").firstElementChild.childNodes[1].textContent.includes("days") ) { hoursUntilTradable = parseInt(listing.querySelector(".TradeLock-lock").firstElementChild.childNodes[1].textContent.replace("in ", "").replace(" days", "")) * 24; }
+		if ( listing.querySelector(".TradeLock-lock").firstElementChild.childNodes[1].textContent.includes("hours") ) { hoursUntilTradable = parseInt(listing.querySelector(".TradeLock-lock").firstElementChild.childNodes[1].textContent.replace("in ", "").replace(" hours", "")); }
+		
+		let stickers = [];
+        if (listing.querySelectorAll(".ItemPreview-stickers").length != 0) {
+            listing.querySelector(".ItemPreview-stickers").querySelectorAll(".Tooltip-link").forEach( (sticker) => { stickers.push(ListingSticker.fromElement(sticker)); } );
+        }
+
+		let image = listing.querySelector(".ItemPreview-itemImage").firstElementChild.src;
+        let price = parseInt( listing.querySelector(".ItemPreview-priceValue").firstElementChild.innerText.replace("€", "").replace(",", "").replace(".", "") ) / 100;
+        
+		let sale = 0;
+		if ( listing.querySelectorAll(".GradientLabel").length != 0 ) { sale = parseInt(listing.querySelector(".GradientLabel").firstElementChild.innerText.slice(2, -1)); }
+		
+		let suggestedPrice = parseInt( listing.querySelector(".ItemPreview-oldPrice").innerText.replace("Suggested price €", "").replace(",", "").replace(".", "") ) / 100;
+        let souvenir = listing.querySelector(".ItemPreview-itemTitle").innerText.includes("Souvenir");
+        let stattrak = listing.querySelector(".ItemPreview-itemTitle").innerText.includes("StatTrak");
+        let weapon = listing.querySelector(".ItemPreview-itemTitle").innerText.replace("StatTrak™ ", "").replace("Souvenir ", "");
+		let weaponColor = listing.querySelector(".ItemPreview-itemTitle").style.color;
+        let skin = listing.querySelector(".ItemPreview-itemName").innerText.split(" (")[0];
+        let hasNametag = listing.querySelectorAll(".ItemPreview-nameTag").length != 0;
+        if (hasNametag) { skin = skin.slice(0, -1); }
+
+        let phase = null;
+        if (skin.includes("Doppler")) { phase = listing.querySelector(".ItemPreview-itemName").innerText.split(" (")[1].replace(")", ""); }
+
+        let fadePercentage = null;
+        if ( !(skin.includes("Marble")) && (skin.includes("Fade")) ) { fadePercentage = parseFloat( listing.querySelector(".ItemPreview-itemName").innerText.split(" (")[1].replace("%)", "") ); }
+
+		let subText = listing.querySelector(".ItemPreview-itemText").innerText
+
+        let wear = null;
+        if (listing.querySelector(".ItemPreview-itemText").innerText.includes("Factory New"))    { wear = "Factory New";    }
+        if (listing.querySelector(".ItemPreview-itemText").innerText.includes("Minimal Wear"))   { wear = "Minimal Wear";   }
+        if (listing.querySelector(".ItemPreview-itemText").innerText.includes("Field-Tested"))   { wear = "Field-Tested";   }
+        if (listing.querySelector(".ItemPreview-itemText").innerText.includes("Well-Worn"))      { wear = "Well-Worn";      }
+        if (listing.querySelector(".ItemPreview-itemText").innerText.includes("Battle-Scarred")) { wear = "Battle-Scarred"; }
+
+        let rarity = null;
+        if (listing.querySelector(".ItemPreview-itemText").innerText.includes("Consumer"))   { rarity = "Consumer";   }
+        if (listing.querySelector(".ItemPreview-itemText").innerText.includes("Industrial")) { rarity = "Industrial"; }
+        if (listing.querySelector(".ItemPreview-itemText").innerText.includes("Mil-Spec"))   { rarity = "Mil-Spec";   }
+        if (listing.querySelector(".ItemPreview-itemText").innerText.includes("Restricted")) { rarity = "Restricted"; }
+        if (listing.querySelector(".ItemPreview-itemText").innerText.includes("Classified")) { rarity = "Classified"; }
+        if (listing.querySelector(".ItemPreview-itemText").innerText.includes("Covert"))     { rarity = "Covert";     }
+
+        let float = null;
+        if (listing.querySelectorAll(".WearBar-value").length != 0) {
+            float = parseFloat( listing.querySelector(".WearBar-value").innerText );
+        }
+
+        let link = listing.querySelector(".ItemPreview-link").href;
+        let id = parseInt( link.split("/")[ link.split("/").length-1 ] );
+        let urlName = link.split("/")[4];
+
+		let instance = new Listing(hoursUntilTradable, stickers, image, price, sale, suggestedPrice, souvenir, stattrak, weapon, weaponColor, skin, hasNametag, phase, fadePercentage, subText, wear, rarity, float, link, id, urlName);
+		instance.element = listing;
+		listing.instance = instance;
+		return instance;
+
+	}
+
+	spawnElement = () => {
+
+		let element = document.createElement("div");
+		element.classList.add("CatalogPage-item");
+		element.classList.add("CatalogPage-item--grid");
+		element.innerHTML = "<div class=\"ItemPreview ItemPreview--grid ItemPreview--id-730\"><a class=\"ItemPreview-href\" aria-label=\"★ Butterfly Knife | Fade (Factory New)\" href=\"/item/butterfly-knife-fade-factory-new\">★ Butterfly Knife | Fade (Factory New)</a><div class=\"ItemPreview-content\"><div class=\"ItemPreview-wrapper\"><a class=\"ItemPreview-link\" rel=\"nofollow\" href=\"/item/butterfly-knife-fade-factory-new/20078266\"><div class=\"ItemPreview-commonInfo\"><div class=\"ItemPreview-top\"><div class=\"TradeLock-lock ItemPreview-lock\"><div><svg class=\"TradeLock-timeIcon clock-lock\"><use xlink:href=\"/static/svg/sprite.81f09c5387380f409877.svg#clock-lock\"></use></svg>Tradable</div></div></div><div class=\"ItemPreview-itemImage\"><img class=\"\" src=\"https://community.cloudflare.steamstatic.com/economy/image/class/730/520032493/256x128\" alt=\"★ Butterfly Knife | Fade (Factory New)\" loading=\"lazy\" aria-hidden=\"true\"></div><div class=\"ItemPreview-itemInfo\"><div class=\"ItemPreview-price\"><div class=\"ItemPreview-priceValue\"><div class=\"Tooltip-link\">€3,421.03</div><div class=\"GradientLabel ItemPreview-discount\"><span>− 12%</span></div></div><div class=\"ItemPreview-oldPrice\">Suggested price €3,909.54</div></div><div class=\"ItemPreview-itemTitle\" style=\"color: rgb(134, 80, 172);\">Butterfly Knife</div><div class=\"ItemPreview-itemName\">Fade (86.9%)</div><div class=\"ItemPreview-itemText\">Factory New ★ Covert Knife</div></div></div><div class=\"ItemPreview-wear\"><div class=\"WearBar\"><div class=\"WearBar-value\">0.019</div><div class=\"WearBar-bar\"><div class=\"WearBar-barBg\"><span class=\"WearBar-bgColor WearBar-bgColor--worst\"></span><span class=\"WearBar-bgColor WearBar-bgColor--bad\"></span><span class=\"WearBar-bgColor WearBar-bgColor--normal\"></span><span class=\"WearBar-bgColor WearBar-bgColor--good\"></span><span class=\"WearBar-bgColor WearBar-bgColor--perfect\"></span></div><div class=\"WearBar-progress\" style=\"left: 1.98881%;\"><svg class=\"WearBar-arrow triangle\"><use xlink:href=\"/static/svg/sprite.81f09c5387380f409877.svg#triangle\"></use></svg></div></div></div></div></a></div><div role=\"presentation\" class=\"ItemPreview-actionBtn\"><button type=\"button\" class=\"ItemPreview-mainAction\">Add to cart</button><button type=\"button\" class=\"ItemPreview-sideAction\" aria-label=\"...\"><span class=\"ItemPreview-sideDot\"></span><span class=\"ItemPreview-sideDot\"></span><span class=\"ItemPreview-sideDot\"></span></button></div></div></div>";
+
+		element.querySelector(".TradeLock-lock").firstElementChild.childNodes[1].textContent = "Tradable";
+		if      (this.hoursUntilTradable == 0)  { element.querySelector(".TradeLock-lock").classList.add("TradeLock-lock--unlocked"); }
+		else if (this.hoursUntilTradable <= 72) { element.querySelector(".TradeLock-lock").firstElementChild.childNodes[1].textContent = "in " + this.hoursUntilTradable                + " hours"; }
+		else                                    { element.querySelector(".TradeLock-lock").firstElementChild.childNodes[1].textContent = "in " + Math.floor(this.hoursUntilTradable/24) + " days";  }
+
+		if (this.stickers.length > 0) {
+			let itemPreviewStickers = document.createElement("div");
+			itemPreviewStickers.className = "ItemPreview-stickers";
+			element.querySelector(".ItemPreview-commonInfo").appendChild( itemPreviewStickers );
+			for (const sticker of this.stickers) {
+				itemPreviewStickers.appendChild( sticker.spawnElement() );
+			}
+		}
+
+		element.querySelector(".ItemPreview-itemImage").firstElementChild.src = this.image;
+
+		element.querySelector(".ItemPreview-priceValue").firstElementChild.innerText = "€" + Listing.formatMoney(this.price);
+
+		if (this.sale == 0) { element.querySelector(".ItemPreview-priceValue").removeChild(element.querySelector(".ItemPreview-priceValue").querySelector(".GradientLabel")); }
+		else { element.querySelector(".ItemPreview-priceValue").querySelector(".GradientLabel").firstElementChild.innerText = "− " + this.sale + "%"; }
+
+		element.querySelector(".ItemPreview-oldPrice").innerText = "Suggested price €" + Listing.formatMoney(this.suggestedPrice);
+
+		let itemTitleInnerText = "";
+		if (this.stattrak) { itemTitleInnerText += "StatTrak™ "; }
+		if (this.souvenir) { itemTitleInnerText += "Souvenir "; }
+		element.querySelector(".ItemPreview-itemTitle").innerText = itemTitleInnerText + this.weapon;
+		element.querySelector(".ItemPreview-itemTitle").style.color = this.weaponColor;
+
+		element.querySelector(".ItemPreview-itemName").innerText = this.skin;
+		if (this.phase != null) { element.querySelector(".ItemPreview-itemName").innerText += " (" + this.phase + ")"; }
+		if (this.fadePercentage != null) { element.querySelector(".ItemPreview-itemName").innerText += " (" + this.fadePercentage + "%)"; }
+
+		element.querySelector(".ItemPreview-itemText").innerText = this.subText;
+
+		if (this.float == null) { element.querySelector(".ItemPreview-wear").parentElement.removeChild(element.querySelector(".ItemPreview-wear")); }
+		else {
+			element.querySelector(".WearBar-value").innerText = this.float;
+			element.querySelector(".WearBar-progress").style.left = this.float*100 + "%";
+		}
+
+		element.querySelector(".ItemPreview-link").href = this.link;
+		
+		element.instance = this;
+
+		return element;
+
+	}
+
+	delete = () => {
+
+		if (this.element == null) { throw new Error("Instance does not have an existing element."); }
+
+		this.element.parentElement.removeChild(this.element);
+
+	}
+
+	static formatMoney = (number, decPlaces, decSep, thouSep) => {
+		decPlaces = isNaN(decPlaces = Math.abs(decPlaces)) ? 2 : decPlaces,
+		decSep = typeof decSep === "undefined" ? "," : decSep;
+		thouSep = typeof thouSep === "undefined" ? "." : thouSep;
+		var sign = number < 0 ? "-" : "";
+		var i = String(parseInt(number = Math.abs(Number(number) || 0).toFixed(decPlaces)));
+		var j = (j = i.length) > 3 ? j % 3 : 0;
+
+		return sign +
+			(j ? i.substr(0, j) + thouSep : "") +
+			i.substr(j).replace(/(\decSep{3})(?=\decSep)/g, "$1" + thouSep) +
+			(decPlaces ? decSep + Math.abs(number - i).toFixed(decPlaces).slice(2) : "");
+		}
+
+}
+
+
+class ListingSticker {
+
+	constructor(name, image) {
+
+		if (name == null) { throw new Error("Must provide sticker name."); }
+		if (image == null) { throw new Error("Must provide sticker image."); }
+
+		this.name = name;
+		this.image = image;
+		this.element = null;
+
+	}
+
+	static fromElement = (sticker) => {
+
+		if (sticker == null) { throw new Error("Must provide sticker element."); }
+
+		let instance = new ListingSticker(sticker.querySelector("img").alt, sticker.querySelector("img").src);
+		instance.element = sticker;
+		sticker.instance = instance;
+		return instance;
+
+	}
+
+	spawnElement = () => {
+		let element = document.createElement("div");
+		element.className = "Tooltip-link";
+		element.innerHTML = "<img src=\"" + this.image + "\" alt=\"" + this.name + "\" loading=\"lazy\" class=\"ItemPreview-sticker\">";
+		this.element = element;
+		element.instance = this;
+		return element;
+	}
+
+	delete = () => {
+
+		if (this.element == null) { throw new Error("Instance does not have an existing element."); }
+
+		this.element.parentElement.removeChild(this.element);
+
+	}
+	
+}
+
+
+
+
+
 class FilterPanel {
 
 	constructor(name, opened=false, hidden=false, onOpen=function(){}, onClose=function(){}, onFlip=function(){}, onAddElement=function(){}, onRename=function(){}, onShow=function(){}, onHide=function(){}, onToggleVisibility=function(){}) {
@@ -87,6 +313,8 @@ class FilterPanel {
 		if (hidden) { this.hide(); }
 
 		document.querySelector(".CatalogFilter").firstElementChild.before(this.element);
+
+		this.element.instance = this;
 
 	}
 
@@ -140,7 +368,7 @@ class FilterPanel {
 	}
 
 	addCheckbox = (name, enabled=false, hidden=false, onActivate=function(){}, onDeactivate=function(){}, onToggle=function(){}, onShow=function(){}, onHide=function(){}, onToggleVisibility=function(){}, onRename=function(){}) => {
-		let checkbox = new Checkbox(name, enabled, hidden, onActivate, onDeactivate, onToggle, onShow, onHide, onToggleVisibility, onRename);
+		let checkbox = new FilterPanelCheckbox(name, enabled, hidden, onActivate, onDeactivate, onToggle, onShow, onHide, onToggleVisibility, onRename);
 		this.elements.push( checkbox );
 		this.element.querySelector(".FilterWrapper-content").firstElementChild.appendChild( checkbox.element );
 		this.onAddElement();
@@ -148,7 +376,7 @@ class FilterPanel {
 	}
 
 	addTextbox = (name, prefix="", placeholder="...", value="", hidden=false, onInput=function(){}, onShow=function(){}, onHide=function(){}, onToggleVisibility=function(){}, onRename=function(){}, onSetPrefix=function(){}, onSetPlaceholder=function(){}, onSetValue=function(){}) => {
-		let textbox = new Textbox(name, prefix, placeholder, value, hidden, onInput, onShow, onHide, onToggleVisibility, onRename, onSetPrefix, onSetPlaceholder, onSetValue);
+		let textbox = new FilterPanelTextbox(name, prefix, placeholder, value, hidden, onInput, onShow, onHide, onToggleVisibility, onRename, onSetPrefix, onSetPlaceholder, onSetValue);
 		this.elements.push( textbox );
 		this.element.querySelector(".FilterWrapper-content").firstElementChild.appendChild( textbox.element );
 		this.onAddElement();
@@ -156,7 +384,7 @@ class FilterPanel {
 	}
 
 	addButton = (name, hidden=false, onClick=function(){}, onRename=function(){}, onShow=function(){}, onHide=function(){}, onToggleVisibility=function(){}) => {
-		let button = new Button(name, hidden, onClick, onRename, onShow, onHide, onToggleVisibility);
+		let button = new FilterPanelButton(name, hidden, onClick, onRename, onShow, onHide, onToggleVisibility);
 		this.elements.push( button );
 		this.element.querySelector(".FilterWrapper-content").firstElementChild.appendChild( button.element );
 		this.onAddElement();
@@ -164,7 +392,7 @@ class FilterPanel {
 	}
 
 	addDropdown = (name, hidden=false, onOpen=function(){}, onClose=function(){}, onFlip=function(){}, onSelect=function(){}, onShow=function(){}, onHide=function(){}, onToggleVisibility=function(){}, onRename=function(){}) => {
-		let dropdown = new Dropdown(name, hidden, onOpen, onClose, onFlip, onSelect, onShow, onHide, onToggleVisibility, onRename);
+		let dropdown = new FilterPanelDropdown(name, hidden, onOpen, onClose, onFlip, onSelect, onShow, onHide, onToggleVisibility, onRename);
 		this.elements.push( dropdown );
 		this.element.querySelector(".FilterWrapper-content").firstElementChild.appendChild( dropdown.element );
 		this.onAddElement();
@@ -178,8 +406,7 @@ class FilterPanel {
 }
 
 
-
-class Checkbox {
+class FilterPanelCheckbox {
 
 	constructor(name, enabled, hidden, onActivate, onDeactivate, onToggle, onShow, onHide, onToggleVisibility, onRename) {
 
@@ -205,6 +432,8 @@ class Checkbox {
 		if (hidden) { this.hide(); }
 		
 		this.element.addEventListener("click", this.toggle )
+
+		this.element.instance = this;
 
 	}
 
@@ -259,8 +488,7 @@ class Checkbox {
 }
 
 
-
-class Textbox {
+class FilterPanelTextbox {
 
 	constructor(name, prefix, placeholder, value, hidden, onInput, onShow, onHide, onToggleVisibility, onRename, onSetPrefix, onSetPlaceholder, onSetValue) {
 
@@ -296,6 +524,8 @@ class Textbox {
 
 		this.element.querySelector("input").addEventListener("input", (event) => { this.value = event.target.value; } );
 		this.element.querySelector("input").addEventListener("input", onInput);
+
+		this.element.instance = this;
 
 	}
 
@@ -349,8 +579,7 @@ class Textbox {
 }
 
 
-
-class Button {
+class FilterPanelButton {
 
 	constructor(name, hidden, onClick, onRename, onShow, onHide, onToggleVisibility) {
 
@@ -371,6 +600,8 @@ class Button {
 		this.element.addEventListener("click", onClick);
 
 		if (hidden) { this.hide(); }
+
+		this.element.instance = this;
 
 	}
 
@@ -406,8 +637,7 @@ class Button {
 }
 
 
-
-class Dropdown {
+class FilterPanelDropdown {
 
 	constructor(name, hidden, onOpen, onClose, onFlip, onSelect, onShow, onHide, onToggleVisibility, onRename) {
 
@@ -438,6 +668,8 @@ class Dropdown {
 		this.element.querySelectorAll("li").forEach((option) => { option.addEventListener("click", () => { this.select(option) }); })
 
 		if (hidden) { this.hide(); }
+
+		this.element.instance = this;
 
 	}
 
@@ -509,8 +741,7 @@ class Dropdown {
 }
 
 
-
-class DropdownOption {
+class FilterPanelDropdownOption {
 
 	constructor(name, image, dropdown) {
 		
@@ -530,6 +761,8 @@ class DropdownOption {
 
 		this.element.addEventListener("click", this.select);
 
+		this.element.instance = this;
+
 	}
 
 	select = () => {
@@ -537,3 +770,9 @@ class DropdownOption {
 	}
 
 }
+
+
+
+
+
+document.querySelector(".CatalogPage-item").before( Listing.fromElement(document.querySelector(".CatalogPage-item")).spawnElement() );
