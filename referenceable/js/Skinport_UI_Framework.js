@@ -418,9 +418,9 @@ class FilterPanel {
 		this.element.innerHTML =
 			'<div role="presentation" class="FilterWrapper-header"><div class="FilterWrapper-title">' +
 			name +
-			'</div><div class="FilterWrapper-arrow"><svg class="bottom-chevron"><use xlink:href="https://skinport.com/static/svg/sprite.3563a20180e5557bf5d7.svg#bottom-chevron"></use></svg></div></div><div class="FilterWrapper-contentWrapper hidden" style="display: none"><div class="FilterWrapper-content"><div class="' +
+			'</div><div class="FilterWrapper-arrow"><svg class="bottom-chevron"><use xlink:href="https://skinport.com/static/svg/sprite.81f09c5387380f409877.svg#bottom-chevron"></use></svg></div></div><div class="FilterWrapper-contentWrapper hidden" style="display: none"><div class="FilterWrapper-content"><div class="' +
 			name.trim().replace(" ", "") +
-			'"></div></div></div>';
+			'"></div></div></div>';g
 		this.element.querySelector(".FilterWrapper-header").addEventListener("click", this.flip);
 
 		if (opened) {
